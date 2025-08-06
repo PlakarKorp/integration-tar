@@ -1,5 +1,5 @@
 name: tar
-display_name: TAR (Tape ARchive)
+display_name: TAR
 description: Integration providing import capabilities from TAR archives.
 version: v1.0.0-beta.1
 connectors:
