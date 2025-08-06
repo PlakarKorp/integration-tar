@@ -1,6 +1,6 @@
 # TAR Integration
 
-## What is TAR?
+## Overview
 
 **TAR (Tape Archive)** is a widely used file format and utility for collecting many files into a single archive file, often used for backup and distribution.
 
@@ -10,22 +10,17 @@ This integration allows:
 - Direct restoration of snapshots as TAR archives to specified destinations
 - Compatibility with systems and tools that use the TAR format
 
-## Installation
-
-**This integration is included in the default Plakar installation. No additional steps are required to enable it.**
-
 ## Configuration
 
 The configuration parameters are as follow:
 
-- `file` (required): Path to the TAR archive file
+- `location` (required): Path to the TAR archive file
 
-## Example Usage
+> **Note:** The location can be write directly in the command, with `tar://` prefix. No need to add it in the configuration.
+
+## Examples
 
 ```bash
-# configure a TAR source
-$ plakar source add myTARSrc tar:///path/to/archive.tar
-
 # backup the source
-$ plakar at /tmp/store backup @myTARSrc
+$ plakar at /tmp/store backup tar:///tmp/example.tar
 ```
