@@ -33,8 +33,6 @@ import (
 )
 
 type TarImporter struct {
-	ctx context.Context
-
 	fp  *os.File
 	rd  *gzip.Reader
 	tar *tar.Reader
@@ -53,7 +51,7 @@ func NewTarImporter(ctx context.Context, opts *importer.Options, name string, co
 		return nil, err
 	}
 
-	t := &TarImporter{ctx: ctx, fp: fp, location: location, name: name}
+	t := &TarImporter{fp: fp, location: location, name: name}
 
 	if name == "tar+gz" || name == "tgz" {
 		rd, err := gzip.NewReader(fp)
@@ -85,7 +83,7 @@ func (p *TarImporter) Origin(ctx context.Context) (string, error) {
 
 func (t *TarImporter) Scan(ctx context.Context) (<-chan *importer.ScanResult, error) {
 	ch := make(chan *importer.ScanResult, 1)
-	go t.scan(ch)
+	go t.scan(ctx, ch)
 	return ch, nil
 }
 
@@ -135,7 +133,7 @@ func (e *entry) Close() error {
 	return nil
 }
 
-func (t *TarImporter) scan(ch chan<- *importer.ScanResult) {
+func (t *TarImporter) scan(ctx context.Context, ch chan<- *importer.ScanResult) {
 	defer close(ch)
 
 	info := objects.NewFileInfo("/", 0, 0700|os.ModeDir, time.Unix(0, 0), 0, 0, 0, 0, 1)
@@ -168,7 +166,7 @@ func (t *TarImporter) scan(ch chan<- *importer.ScanResult) {
 		select {
 		case <-t.next:
 			break
-		case <-t.ctx.Done():
+		case <-ctx.Done():
 			return
 		}
 	}
