@@ -7,4 +7,4 @@ connectors:
   executable: tarImporter
   homepage: https://github.com/PlakarKorp/integration-tar
   license: ISC
-  protocols: [tar, tar+gzip]
+  protocols: [tar, tar+gz, tar+gzip, tgz]

@@ -28,9 +28,17 @@ import (
 	"strings"
 	"time"
 
+	"github.com/PlakarKorp/kloset/location"
 	"github.com/PlakarKorp/kloset/objects"
 	"github.com/PlakarKorp/kloset/snapshot/importer"
 )
+
+func init() {
+	importer.Register("tar", location.FLAG_LOCALFS, NewTarImporter)
+	importer.Register("tag+gz", location.FLAG_LOCALFS, NewTarImporter)
+	importer.Register("tag+gzip", location.FLAG_LOCALFS, NewTarImporter)
+	importer.Register("tgz", location.FLAG_LOCALFS, NewTarImporter)
+}
 
 type TarImporter struct {
 	ctx context.Context
@@ -55,7 +63,7 @@ func NewTarImporter(ctx context.Context, opts *importer.Options, name string, co
 
 	t := &TarImporter{ctx: ctx, fp: fp, location: location, name: name}
 
-	if name == "tar+gz" || name == "tgz" {
+	if name == "tar+gz" || name == "tar+gzip" || name == "tgz" {
 		rd, err := gzip.NewReader(fp)
 		if err != nil {
 			t.Close(ctx)
